@@ -14,7 +14,13 @@
           <span>我已阅读并同意用户协议和隐私条款</span>
         </el-form-item>
         <el-form-item>
-          <el-button style="width:100%;" type="primary" @click="login()">登录</el-button>
+          <el-button
+            style="width:100%;"
+            type="primary"
+            @click="login()"
+            :loading="isLoading"
+            :disabled="isLoading"
+          >登录</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -37,6 +43,8 @@ export default {
       // value ? callback() : callback(new Error('请无条件遵守规矩'))
     }
     return {
+      isLoading: false,
+      capObj: null, // 极验对象
       loginForm: {
         mobile: '', // 手机号码
         code: '', // 校验码
@@ -59,6 +67,10 @@ export default {
           // this.$router.push('/home')
           return false
         }
+        if (this.capObj) {
+          return this.capObj.verify()
+        }
+        this.isLoading = true
         // this.$router.push('/home')
         let pro = this.$http({
           url: '/mp/v1_0/captchas/' + this.loginForm.mobile,
@@ -86,6 +98,8 @@ export default {
                   .onReady(() => {
                     // 验证码ready之后才能调用verify方法显示验证码(可以显示窗口了)
                     captchaObj.verify() // 显示验证码窗口
+                    this.isLoading = false // 激活按钮设置
+                    this.capObj = captchaObj // 接收极验对象
                   })
                   .onSuccess(() => {
                     // 行为校验正确的处理
