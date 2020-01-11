@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import './gt.js';
+import './gt.js'
 // import '@/assets/font/iconfont.css';
 export default {
   data () {
@@ -51,9 +51,9 @@ export default {
       isLoading: false,
       capObj: null, // 极验对象
       loginForm: {
-        mobile: '', // 手机号码
-        code: '', // 校验码
-        xieyi: false // 协议
+        mobile: '13911111111', // 手机号码
+        code: '246810', // 校验码
+        xieyi: true // 协议
       },
       loginFormRules: {
         mobile: [
@@ -149,7 +149,7 @@ export default {
 .login-container {
   height: 100%;
   background-color: gray;
-  background-image: url("./login_bg.jpg");
+  background-image: url('./login_bg.jpg');
   background-size: cover;
   display: flex;
   justify-content: center;
