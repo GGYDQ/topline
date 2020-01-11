@@ -21,19 +21,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="频道列表：">
-            <el-select
-              v-model="searchForm.channel_id"
-              placeholder="请选择"
-              clearable
-              @change="getArticleList()"
-            >
-              <el-option
-                v-for="item in channelList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
+            <channel @slt="selectHandler"></channel>
           </el-form-item>
           <el-form-item label="时间选择：">
             <el-date-picker
@@ -77,8 +65,20 @@
         <el-table-column prop="status" label="状态"></el-table-column>
         <el-table-column prop="pubdate" label="发布时间"></el-table-column>
         <el-table-column label="操作">
-          <el-button type="primary" size="mini" icon="el-icon-edit">修改</el-button>
-          <el-button type="danger" size="mini" icon="el-icon-delete">删除</el-button>
+          <template slot-scope="stData">
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-edit"
+              @click="$router.push(`/articleedit/${stData.row.id}`)"
+            >修改</el-button>
+            <el-button
+              type="danger"
+              size="mini"
+              icon="el-icon-delete"
+              @click="del(stData.row.id)"
+            >删除</el-button>
+          </template>
         </el-table-column>
       </el-table>
       <el-pagination
@@ -95,6 +95,7 @@
 </template>
 
 <script>
+import Channel from '@/components/channel.vue'
 export default {
   name: 'ArticleList', // 监听器设置
   created () {
@@ -146,7 +147,14 @@ export default {
       }
     }
   },
+  components: {
+    // 注册频道独立组件
+    Channel
+  },
   methods: {
+    selectHandler (val) {
+      this.searchForm.channel_id = val
+    },
     // 分页相关
     // 每条条数变化的回调处理
     handleSizeChange (val) {
@@ -207,6 +215,28 @@ export default {
         .catch(err => {
           return this.$message.error('获得文章失败：' + err)
         })
+    },
+    del (id) {
+      this.$confirm('确定删除?', '删除', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let pro = this.$http({
+          url: '/mp/v1_0/articles/' + id,
+          method: 'delete'
+        })
+        pro
+          .then(result => {
+            // 删除成功
+            // console.log(result)  // 返回空的data数据
+            // 直接页面刷新即可
+            this.getArticleList()
+          })
+          .catch(err => {
+            return this.$message.error('删除文章失败：' + err)
+          })
+      })
     }
   }
 }

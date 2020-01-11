@@ -51,7 +51,7 @@ export default {
       isLoading: false,
       capObj: null, // 极验对象
       loginForm: {
-        mobile: '13911111111', // 手机号码
+        mobile: '15012344321', // 手机号码
         code: '246810', // 校验码
         xieyi: true // 协议
       },
@@ -169,6 +169,10 @@ export default {
     }
     .el-form {
       width: 75%;
+    }
+
+    .quill-editor /deep/ .ql-editor {
+      height: 200px;
     }
   }
 }

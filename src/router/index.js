@@ -5,12 +5,19 @@ import Home from '@/views/home'
 import Welcome from '@/views/welcome'
 import Article from '@/views/article'
 import ArticleAdd from '@/views/articleadd'
-
+import ArticleEdit from '@/views/articleedit'
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/', redirect: '/login' },
-  { path: '/login', name: 'login', component: Login },
+  {
+    path: '/',
+    redirect: '/login'
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
+  },
   {
     path: '/home',
     name: 'home',
@@ -32,6 +39,11 @@ const routes = [
         path: '/articleadd',
         name: 'articleadd',
         component: ArticleAdd
+      },
+      {
+        path: '/articleedit/:aid',
+        name: 'articleedit',
+        component: ArticleEdit
       }
     ]
   }
